@@ -10,11 +10,9 @@ var MODULE = function() {
     var addDeadlineInput = document.getElementById('addDeadlineInput');
     todos.push({
       todoText: addTodoTextInput.value,
-      // deadline: addDeadlineInput.value,
       completed: false
     });
     addTodoTextInput.value = '';
-    // addDeadlineInput.value = '';
     displayTodos();
   }
 
