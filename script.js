@@ -10,32 +10,56 @@ var MODULE = function() {
     var addDeadlineInput = document.getElementById('addDeadlineInput');
     todos.push({
       todoText: addTodoTextInput.value,
-      // deadline: addDeadlineInput.value,
+      deadline: addDeadlineInput.value,
       completed: false
     });
     addTodoTextInput.value = '';
-    // addDeadlineInput.value = '';
-    displayTodos();
+    addDeadlineInput.value = '';
+    displayTodos(todos);
   }
 
   var deleteTodo = function(position) {
     todos.splice(position, 1);
-    displayTodos();
+    displayTodos(todos);
+  }
+
+  var displayAllTodos = function(){
+    displayTodos(todos);
   }
 
   var displayDoneTodos = function() {
-    todos.forEach(function(todo, position){
-      if (todo.completed) {
-        console.log('todo.completed');
-      }
-      displayTodos();
+    var doneTodos = todos.filter(function(task){
+      return task.completed;
+    });
+      displayTodos(doneTodos);
+  }
+
+   var displayUndoneTodos = function() {
+    var undoneTodos = todos.filter(function(task){
+      return !task.completed;
+    });
+      displayTodos(undoneTodos);
+  }
+
+  var displayTasksForTomorrow = function() {
+    var tasksForTomorrow = todos.filter(function(task){
+      console.log('task.deadline = ' + Date.parse(task.deadline));
+      var date = Date.now();
+      console.log(date);
+      // console.log('Date.now() =' + date.toLocaleDateString());
+
+      return
     });
   }
 
-  var displayTodos = function() {
+  var displayTasksForWeek = function() {
+
+  }
+
+  var displayTodos = function(tasks) {
     var todosUl = document.querySelector('ul');
     todosUl.innerHTML = '';
-    todos.forEach(function(todo, position) {
+    tasks.forEach(function(todo, position) {
       var todoLi = document.createElement('li');
       todoLi.className = 'task';
       var todoText = '';
@@ -99,7 +123,11 @@ var MODULE = function() {
   return {
     init: init,
     addTodo: addTodo,
-    displayDoneTodos: displayDoneTodos
+    displayAllTodos: displayAllTodos,
+    displayDoneTodos: displayDoneTodos,
+    displayUndoneTodos: displayUndoneTodos,
+    displayTasksForTomorrow: displayTasksForTomorrow,
+    displayTasksForWeek: displayTasksForWeek
   };
 
 } ();
@@ -108,5 +136,12 @@ document.getElementById('addButton').onclick = function () {
   MODULE.init();
 };
 
+// document.getElementById('displayDone').onclick = function () {
+//   MODULE.displayDoneTodos();
+// };
+
+// document.getElementById('displayUndone').onclick = function () {
+//   MODULE.displayUndoneTodos();
+// };
 
 
