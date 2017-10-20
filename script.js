@@ -31,29 +31,32 @@ var MODULE = function() {
     var doneTodos = todos.filter(function(task){
       return task.completed;
     });
-      displayTodos(doneTodos);
+    displayTodos(doneTodos);
   }
 
-   var displayUndoneTodos = function() {
+  var displayUndoneTodos = function() {
     var undoneTodos = todos.filter(function(task){
       return !task.completed;
     });
-      displayTodos(undoneTodos);
+    displayTodos(undoneTodos);
   }
 
   var displayTasksForTomorrow = function() {
     var tasksForTomorrow = todos.filter(function(task){
-      console.log('task.deadline = ' + Date.parse(task.deadline));
-      var date = Date.now();
-      console.log(date);
-      // console.log('Date.now() =' + date.toLocaleDateString());
-
-      return
+      var deadline = Date.parse(task.deadline)
+      var date = new Date().setHours(3, 0, 0, 0) + 86400000;
+      return deadline === date;
     });
+    displayTodos(tasksForTomorrow);
   }
 
   var displayTasksForWeek = function() {
-
+    var tasksForWeek = todos.filter(function(task){
+      var deadline = Date.parse(task.deadline);
+      var date = new Date().setHours(3, 0, 0, 0);
+      return date + 604800000 >= deadline && date <= deadline;
+    });
+    displayTodos(tasksForWeek);
   }
 
   var displayTodos = function(tasks) {
@@ -72,7 +75,7 @@ var MODULE = function() {
       todoLi.appendChild(createDeleteButton());
       todosUl.appendChild(todoLi);
       if (todo.completed) {
-        todoLi.className = 'checked';
+        todoLi.className = 'task checked';
         document.getElementsByClassName('checkbox').checked = true;
       }
     }, this);
@@ -112,7 +115,6 @@ var MODULE = function() {
         event.target.parentNode.classList.toggle('checked');
         todos.forEach(function(val, i){
           if (val.todoText === event.target.parentNode.textContent.slice(0, -1)) {
-            console.log('val.completed = ' + val.completed);
             val.completed = !val.completed;
           }
         });
@@ -135,13 +137,5 @@ var MODULE = function() {
 document.getElementById('addButton').onclick = function () {
   MODULE.init();
 };
-
-// document.getElementById('displayDone').onclick = function () {
-//   MODULE.displayDoneTodos();
-// };
-
-// document.getElementById('displayUndone').onclick = function () {
-//   MODULE.displayUndoneTodos();
-// };
 
 
