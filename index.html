@@ -10,9 +10,17 @@
 
   <div class="header">
   <h1>Todo List</h1>
+    <input class="inputTask" id="addTodoTextInput" type="text">
+    <input class="inputDeadline" id="addDeadlineInput" type="date">
+    <button class="button" id="addButton">Add</button>
+  </div>
 
-    <input class='inputTask' id="addTodoTextInput" type="text">
-    <button class='addButton' id='addButton'>Add</button>
+  <div>
+    <button class="button" onclick="MODULE.displayAllTodos()">Все</button>
+    <button class="button" id="displayDone" onclick="MODULE.displayDoneTodos()">Сделанные</button>
+    <button class="button" onclick="MODULE.displayUndoneTodos()">Несделанные</button>
+    <button class="button" onclick="MODULE.displayTasksForTomorrow()">На завтра</button>
+    <button class="button" onclick="MODULE.displayTasksForWeek()">На неделю</button>
   </div>
 
   <ul class="list"></ul>
