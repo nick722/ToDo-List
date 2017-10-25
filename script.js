@@ -64,20 +64,20 @@ var MODULE = function() {
     todosUl.innerHTML = '';
     tasks.forEach(function(todo, position) {
       var todoLi = document.createElement('li');
-      todoLi.className = 'task';
-      var todoText = '';
-      todoText = todo.todoText;
+      var todoText = todo.todoText;
       var deadlineText = todo.deadline;
       todoLi.id = position;
       todoLi.textContent = todoText;
       todoLi.prepend(createCheckbox());
       todoLi.appendChild(createDeadline(deadlineText));
       todoLi.appendChild(createDeleteButton());
-      todosUl.appendChild(todoLi);
       if (todo.completed) {
-        todoLi.className = 'task checked';
-        document.getElementsByClassName('checkbox').checked = true;
+        todoLi.className = 'checked';
+        todoLi.firstElementChild.setAttribute('checked', 'checked');
+      } else {
+        todoLi.className = 'task';
       }
+      todosUl.appendChild(todoLi);
     }, this);
   }
 
@@ -118,6 +118,7 @@ var MODULE = function() {
             val.completed = !val.completed;
           }
         });
+
       }
     });
   }();
