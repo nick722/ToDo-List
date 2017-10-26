@@ -68,15 +68,18 @@ var MODULE = function() {
       var deadlineText = todo.deadline;
       todoLi.id = position;
       todoLi.textContent = todoText;
-      todoLi.prepend(createCheckbox());
-      todoLi.appendChild(createDeadline(deadlineText));
-      todoLi.appendChild(createDeleteButton());
+      //
+      var checkbox = createCheckbox();
+      todoLi.prepend(checkbox);
       if (todo.completed) {
         todoLi.className = 'checked';
-        todoLi.firstElementChild.setAttribute('checked', 'checked');
+        checkbox.checked = true;
+        // todoLi.firstElementChild.setAttribute('checked', 'checked');
       } else {
         todoLi.className = 'task';
       }
+      todoLi.appendChild(createDeadline(deadlineText));
+      todoLi.appendChild(createDeleteButton());
       todosUl.appendChild(todoLi);
     }, this);
   }
@@ -114,10 +117,13 @@ var MODULE = function() {
       if (elementClicked.className === 'checkbox') {
         event.target.parentNode.classList.toggle('checked');
         todos.forEach(function(val, i){
-          if (val.todoText === event.target.parentNode.textContent.slice(0, -1)) {
-            val.completed = !val.completed;
-          }
-        });
+          console.log('event.target.parentNode.id = ' + event.target.parentNode.id);
+          console.log('i = ' + i);
+            if (parseInt(event.target.parentNode.id) === i) {
+              console.log('event.target.parentNode.id === i');
+              val.completed = !val.completed;
+            }
+          });
 
       }
     });
