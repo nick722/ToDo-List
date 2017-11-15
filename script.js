@@ -1,13 +1,15 @@
 var MODULE = function() {
-  var todos = [];
+  var todos = [];  
+  var addTodoTextInput = document.querySelector('#addTodoTextInput');
+  var addDeadlineInput = document.querySelector('#addDeadlineInput');  
+  var todosUl = document.querySelector('.todosUl');
+  var todoVidget = document.querySelector('#todoVidget');
 
   var init = function() {
     addTodo();
   }
 
   var addTodo = function() {
-    var addTodoTextInput = document.getElementById('addTodoTextInput');
-    var addDeadlineInput = document.getElementById('addDeadlineInput');
     todos.push({
       todoText: addTodoTextInput.value,
       deadline: addDeadlineInput.value,
@@ -43,8 +45,9 @@ var MODULE = function() {
 
   var displayTasksForTomorrow = function() {
     var tasksForTomorrow = todos.filter(function(task){
-      var deadline = Date.parse(task.deadline)
-      var date = new Date().setHours(3, 0, 0, 0) + 86400000;
+      var deadline = Date.parse(task.deadline);
+      var twentyFourHours = 86400000;
+      var date = new Date().setHours(3, 0, 0, 0) + twentyFourHours;//current local time + 24 hours
       return deadline === date;
     });
     displayTodos(tasksForTomorrow);
@@ -53,14 +56,16 @@ var MODULE = function() {
   var displayTasksForWeek = function() {
     var tasksForWeek = todos.filter(function(task){
       var deadline = Date.parse(task.deadline);
+      var week = 604800000;
       var date = new Date().setHours(3, 0, 0, 0);
-      return date + 604800000 >= deadline && date <= deadline;
+      return date + week >= deadline && date <= deadline;
     });
     displayTodos(tasksForWeek);
   }
 
-  var displayTodos = function(tasks) {
-    var todosUl = document.querySelector('ul');
+  var displayTodos = function(tasks) {    
+    // Зачем каждый раз заново перерисовывать 
+    // все таски? Это очень затратно по времени.
     todosUl.innerHTML = '';
     tasks.forEach(function(todo, position) {
       var todoLi = document.createElement('li');
@@ -104,29 +109,35 @@ var MODULE = function() {
     return deleteButton;
   };
 
-  var setUpEventListeners = function() {
-    var todosUl = document.querySelector('ul');
-    todosUl.addEventListener('click', function(event) {
+  var setUpEventListeners = function() {    
+    todoVidget.addEventListener('click', function(event) {
       var elementClicked = event.target;
       if (elementClicked.className === 'deleteButton') {
-       deleteTodo(parseInt(elementClicked.parentNode.id));
-     }
-   });
-    todosUl.addEventListener('click', function(event) {
-      var elementClicked = event.target;
-      if (elementClicked.className === 'checkbox') {
+        deleteTodo(parseInt(elementClicked.parentNode.id));
+      } else if (elementClicked.className === 'checkbox') {
+        // Поиск по parentNode – самый последний вариант, 
+        // когда надо быстро что-то впилить и есть гарантия, 
+        // что эта разметка никогда не будет меняться.
         event.target.parentNode.classList.toggle('checked');
         todos.forEach(function(val, i){
-          console.log('event.target.parentNode.id = ' + event.target.parentNode.id);
-          console.log('i = ' + i);
-            if (parseInt(event.target.parentNode.id) === i) {
-              console.log('event.target.parentNode.id === i');
-              val.completed = !val.completed;
-            }
-          });
+          if (parseInt(event.target.parentNode.id) === i) {
+            val.completed = !val.completed;
+          }
+        });
+      } else if (elementClicked.id === 'displayAllTodos') {
+        displayAllTodos();
+      } else if (elementClicked.id === 'displayDoneTodos') {
+        displayDoneTodos();
+      } else if (elementClicked.id === 'displayUndoneTodos') {
+        displayUndoneTodos();
 
+      } else if (elementClicked.id === 'displayTasksForTomorrow') {
+        displayTasksForTomorrow();
+      } else if (elementClicked.id === 'displayTasksForWeek') {
+        displayTasksForWeek();
       }
     });
+
   }();
 
   return {
@@ -142,6 +153,7 @@ var MODULE = function() {
 } ();
 
 document.getElementById('addButton').onclick = function () {
+  event.preventDefault();
   MODULE.init();
 };
 

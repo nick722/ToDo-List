@@ -8,23 +8,27 @@
 </head>
 <body>
 
-  <div class="header">
-  <h1>Todo List</h1>
-    <input class="inputTask" id="addTodoTextInput" type="text">
-    <input class="inputDeadline" id="addDeadlineInput" type="date">
-    <button class="button" id="addButton">Add</button>
+  <div id="todoVidget">
+    <div class="header">
+      <h1>Todo List</h1>
+      <form>
+        <input class="inputTask" id="addTodoTextInput" type="text">
+        <input class="inputDeadline" id="addDeadlineInput" type="date">
+        <input type="submit" value="Add" class="button" id="addButton">
+      </form>
+    </div>
+
+    <div>
+      <button class="button" id="displayAllTodos">Все</button>
+      <button class="button" id="displayDoneTodos">Сделанные</button>
+      <button class="button" id="displayUndoneTodos">Несделанные</button>
+      <button class="button" id="displayTasksForTomorrow">На завтра</button>
+      <button class="button" id="displayTasksForWeek">На неделю</button>
+    </div>  
+
+    <ul class="todosUl"></ul>
+
   </div>
-
-  <div>
-    <button class="button" onclick="MODULE.displayAllTodos()">Все</button>
-    <button class="button" id="displayDone" onclick="MODULE.displayDoneTodos()">Сделанные</button>
-    <button class="button" onclick="MODULE.displayUndoneTodos()">Несделанные</button>
-    <button class="button" onclick="MODULE.displayTasksForTomorrow()">На завтра</button>
-    <button class="button" onclick="MODULE.displayTasksForWeek()">На неделю</button>
-  </div>
-
-  <ul class="list"></ul>
-
 </body>
 
 </html>
